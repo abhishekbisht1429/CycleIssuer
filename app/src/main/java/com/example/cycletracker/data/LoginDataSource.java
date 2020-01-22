@@ -15,18 +15,18 @@ public class LoginDataSource {
     private static List<User> users;
     static {
         users = new ArrayList<>();
-        users.add(new User("500060150","1234"));
-        users.add(new User("500000001","1234"));
-        users.add(new User("500000002","1234"));
-        users.add(new User("500000003","1234"));
+        users.add(new User("500060150","123456"));
+        users.add(new User("500000001","123456"));
+        users.add(new User("500000002","123456"));
+        users.add(new User("500000003","123456"));
     }
     public Result<LoggedInUser> login(String username, String password) {
 
         try {
             // TODO: handle loggedInUser authentication
             for(User user : users) {
-                if(username.equals(user.getSapId()) && password.equals(user.getPassword())) {
-                    LoggedInUser loggedInUser = new LoggedInUser(username, user.getSapId());
+                if(username.equals(user.getUsername()) && password.equals(user.getPassword())) {
+                    LoggedInUser loggedInUser = new LoggedInUser(username, user.getUsername());
                     return new Result.Success<>(loggedInUser);
                 }
             }

@@ -1,16 +1,16 @@
 package com.example.cycletracker.data.model;
 
 public class User {
-    private String sapId;
+    private String username;
     private String password;
 
-    public User(String sapId, String password) {
-        this.sapId = sapId;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public String getSapId() {
-        return sapId;
+    public String getUsername() {
+        return username;
     }
 
     public String getPassword() {

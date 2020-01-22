@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.cycletracker"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -32,4 +32,9 @@ dependencies {
 
 //    implementation 'com.jakewharton:butterknife:8.8.1'
 //    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.journeyapps:zxing-android-embedded:4.0.0'
+    implementation 'com.google.zxing:core:3.3.0'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 }
