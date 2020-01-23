@@ -3,7 +3,7 @@ package com.example.cycletracker.ui.login;
 import androidx.annotation.Nullable;
 
 /**
- * Data validation state of the login form.
+ * Data validation state of the fetchUserDetails form.
  */
 class LoginFormState {
     @Nullable

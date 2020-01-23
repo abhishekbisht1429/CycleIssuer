@@ -5,16 +5,16 @@ package com.example.cycletracker.data.model;
  */
 public class LoggedInUser {
 
-    private String userId;
+    private String username;
     private String displayName;
 
-    public LoggedInUser(String userId, String displayName) {
-        this.userId = userId;
+    public LoggedInUser(String username, String displayName) {
+        this.username = username;
         this.displayName = displayName;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
     public String getDisplayName() {

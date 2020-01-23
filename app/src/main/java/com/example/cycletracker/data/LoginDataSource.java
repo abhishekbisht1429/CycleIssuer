@@ -2,13 +2,18 @@ package com.example.cycletracker.data;
 
 import com.example.cycletracker.data.model.LoggedInUser;
 import com.example.cycletracker.data.model.User;
+import com.example.cycletracker.retrofit.ApiClient;
+import com.example.cycletracker.retrofit.models.LoginResp;
+import com.example.cycletracker.retrofit.models.UserData;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Response;
+
 /**
- * Class that handles authentication w/ login credentials and retrieves user information.
+ * Class that handles authentication w/ fetchUserDetails credentials and retrieves user information.
  */
 public class LoginDataSource {
 
@@ -21,19 +26,27 @@ public class LoginDataSource {
         users.add(new User("500000003","123456"));
     }
     public Result<LoggedInUser> login(String username, String password) {
-
+        Result<LoggedInUser> result;
         try {
-            // TODO: handle loggedInUser authentication
-            for(User user : users) {
-                if(username.equals(user.getUsername()) && password.equals(user.getPassword())) {
-                    LoggedInUser loggedInUser = new LoggedInUser(username, user.getUsername());
-                    return new Result.Success<>(loggedInUser);
+
+            Response<LoginResp> loginResponse = ApiClient.getInstance().getCycleIssuerClient().login(username, password).execute();
+            if(loginResponse.isSuccessful()) {
+                Response<UserData> userDataResponse = ApiClient.getInstance().getCycleIssuerClient().fetchUserDetails(username, password).execute();
+                if(userDataResponse.isSuccessful()) {
+                    UserData data = userDataResponse.body();
+                    //TODO: retrive other fields as well from the loginResponseData
+                    LoggedInUser user = new LoggedInUser(data.getUsername(), data.getFirstName() + " " + data.getLastName());
+                    result = new Result.Success<LoggedInUser>(user);
+                } else {
+                    result = new Result.Error(new Exception("Failed to retrieve use data after obtaining token. Error code : "+userDataResponse.code()));
                 }
+            } else {
+                result = new Result.Error(new Exception("Failed to authenticated. Error code : "+loginResponse.code()));
             }
-            return new Result.Error(new IllegalArgumentException("Invalid user credentials"));
-        } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
+        } catch (IOException ioE) {
+            result = new Result.Error(ioE);
         }
+        return result;
     }
 
     public void logout() {

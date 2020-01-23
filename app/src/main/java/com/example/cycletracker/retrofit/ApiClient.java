@@ -1,17 +1,18 @@
 package com.example.cycletracker.retrofit;
 
+import com.example.cycletracker.util.WApiConsts;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "";
     private Retrofit retrofit;
     private static ApiClient client;
     private CycleIssuerClient cycleIssuerClient;
     private ApiClient() {
         if(retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(WApiConsts.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

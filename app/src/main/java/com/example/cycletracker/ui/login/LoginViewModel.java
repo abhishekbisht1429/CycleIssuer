@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.util.Patterns;
 
 import com.example.cycletracker.data.LoginRepository;
@@ -31,14 +33,29 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        //Since the outer class is not an Activity or Fragment, therefore no need to worry about memory leak
+        @SuppressLint("StaticFieldLeak") AsyncTask loginTaks = new AsyncTask<String, Void, Result<LoggedInUser>>() {
 
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+            @Override
+            protected Result<LoggedInUser> doInBackground(String... strings) {
+                String username = strings[0];
+                String password = strings[1];
+
+                Result<LoggedInUser> result = loginRepository.login(username, password);
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(Result<LoggedInUser> result) {
+                if (result instanceof Result.Success) {
+                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+                    loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+                } else {
+                    loginResult.setValue(new LoginResult(R.string.login_failed));
+                }
+            }
+        };
+
     }
 
     public void loginDataChanged(String username, String password) {
