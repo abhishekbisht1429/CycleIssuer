@@ -2,15 +2,20 @@ package com.example.cycletracker.ui.login;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.room.Room;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,29 +30,32 @@ import android.widget.Toast;
 
 import com.example.cycletracker.R;
 import com.example.cycletracker.activity.HomeActivity;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.cycletracker.data.localdb.LocalDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String LOGIN_PREFERENCES = "login preferences";
     private LoginViewModel loginViewModel;
     private View container;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private ProgressBar loadingProgressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(this.getApplication()))
                 .get(LoginViewModel.class);
 
         container = findViewById(R.id.container);
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
-        final Button loginButton = findViewById(R.id.btn_login);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        usernameEditText = findViewById(R.id.username);
+        passwordEditText = findViewById(R.id.password);
+        loginButton = findViewById(R.id.btn_login);
+        loadingProgressBar = findViewById(R.id.loading);
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
+        loginViewModel.getLoginFormState().observe(this, (@Nullable LoginFormState loginFormState) -> {
                 if (loginFormState == null) {
                     return;
                 }
@@ -58,16 +66,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginFormState.getPasswordError() != null) {
                     passwordEditText.setError(getString(loginFormState.getPasswordError()));
                 }
-            }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
+        loginViewModel.getLoginResult().observe(this, (@Nullable LoginResult loginResult) -> {
                 if (loginResult == null) {
                     return;
                 }
-                loadingProgressBar.setVisibility(View.GONE);
+                showProgress(false);
                 if (loginResult.getError() != null) {
                     showLoginFailed(loginResult.getError());
                 }
@@ -78,7 +83,6 @@ public class LoginActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK);
 
                 //Complete and destroy fetchUserDetails activity once successful
-            }
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -100,26 +104,26 @@ public class LoginActivity extends AppCompatActivity {
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
+        passwordEditText.setOnEditorActionListener((TextView v, int actionId, KeyEvent event)->{
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
             }
+            return false;
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+        loginButton.setOnClickListener((View v) -> {
+                showProgress(true);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-            }
         });
+    }
+
+    private void showProgress(boolean show) {
+        usernameEditText.setEnabled(!show);
+        passwordEditText.setEnabled(!show);
+        loginButton.setEnabled(!show);
+        loadingProgressBar.setVisibility(show?View.VISIBLE:View.GONE);
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

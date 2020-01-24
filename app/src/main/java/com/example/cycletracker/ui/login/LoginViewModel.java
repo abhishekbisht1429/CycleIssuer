@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Patterns;
 
-import com.example.cycletracker.data.LoginRepository;
+import com.example.cycletracker.data.DataRepository;
 import com.example.cycletracker.data.Result;
 import com.example.cycletracker.data.model.LoggedInUser;
 import com.example.cycletracker.R;
@@ -17,10 +18,11 @@ public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private LoginRepository loginRepository;
+    private DataRepository dataRepository;
 
-    LoginViewModel(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
+    LoginViewModel(Application application) {
+        this.dataRepository = DataRepository.getInstance(application);
+        findLoggedInUser();
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -32,7 +34,6 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
         //Since the outer class is not an Activity or Fragment, therefore no need to worry about memory leak
         @SuppressLint("StaticFieldLeak") AsyncTask loginTaks = new AsyncTask<String, Void, Result<LoggedInUser>>() {
 
@@ -41,20 +42,15 @@ public class LoginViewModel extends ViewModel {
                 String username = strings[0];
                 String password = strings[1];
 
-                Result<LoggedInUser> result = loginRepository.login(username, password);
+                Result<LoggedInUser> result = dataRepository.login(username, password);
                 return result;
             }
 
             @Override
             protected void onPostExecute(Result<LoggedInUser> result) {
-                if (result instanceof Result.Success) {
-                    LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-                    loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-                } else {
-                    loginResult.setValue(new LoginResult(R.string.login_failed));
-                }
+                setLoginResult(result);
             }
-        };
+        }.execute(username, password);
 
     }
 
@@ -67,6 +63,7 @@ public class LoginViewModel extends ViewModel {
             loginFormState.setValue(new LoginFormState(true));
         }
     }
+
 
     // A placeholder username validation check
     private boolean isUserNameValid(String username) {
@@ -82,6 +79,33 @@ public class LoginViewModel extends ViewModel {
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        return password != null && password.trim().length() > 3;
+    }
+
+    private void setLoginResult(Result<LoggedInUser> result) {
+        if (result instanceof Result.Success) {
+            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        } else {
+            loginResult.setValue(new LoginResult(R.string.login_failed));
+        }
+    }
+
+    private void findLoggedInUser() {
+        //Since the outer class is not an Activity or Fragment, therefore no need to worry about memory leak
+        @SuppressLint("StaticFieldLeak") AsyncTask loginTaks = new AsyncTask<Void, Void, Result<LoggedInUser>>() {
+
+            @Override
+            protected Result<LoggedInUser> doInBackground(Void... strings) {
+
+                Result<LoggedInUser> result = dataRepository.findLoggedInUser();
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(Result<LoggedInUser> result) {
+                setLoginResult(result);
+            }
+        }.execute();
     }
 }
