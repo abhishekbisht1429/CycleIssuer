@@ -113,9 +113,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener((View v) -> {
-                showProgress(true);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+            showProgress(true);
+            loginViewModel.login(usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString());
         });
     }
 

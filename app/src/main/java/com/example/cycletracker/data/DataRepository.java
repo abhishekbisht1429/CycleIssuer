@@ -61,6 +61,7 @@ public class DataRepository {
     public Result<LoggedInUser> findLoggedInUser() {
         LoggedInUser user = database.getUserDao().findLoggedInUser();
         if(user!=null) {
+            setLoggedInUser(user);
             return new Result.Success<LoggedInUser>(user);
         } else {
             return new Result.Error(new Exception("No Logged in user found"));

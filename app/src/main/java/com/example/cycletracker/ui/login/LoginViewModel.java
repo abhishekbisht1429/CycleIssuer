@@ -54,6 +54,24 @@ public class LoginViewModel extends ViewModel {
 
     }
 
+
+    //TODO: this is jst for testing. Actual logut wont be part of login activity
+    public void logout() {
+        @SuppressLint("StaticFieldLeak") AsyncTask loginTaks = new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... strings) {
+                dataRepository.logout();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void v) {
+
+            }
+        }.execute();
+    }
+
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
@@ -97,7 +115,6 @@ public class LoginViewModel extends ViewModel {
 
             @Override
             protected Result<LoggedInUser> doInBackground(Void... strings) {
-
                 Result<LoggedInUser> result = dataRepository.findLoggedInUser();
                 return result;
             }

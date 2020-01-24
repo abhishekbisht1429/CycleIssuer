@@ -24,6 +24,6 @@ public interface CycleIssuerClient {
                               @Field(WApiConsts.FORM_FIELD_PASSWORD) String password);
 
     @POST("auth/token/logout")
-    Call logout(@Header("Authorization") String token);
+    Call<String> logout();
 
 }

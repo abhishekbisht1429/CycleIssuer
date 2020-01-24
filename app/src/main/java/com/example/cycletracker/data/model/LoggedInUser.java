@@ -24,6 +24,7 @@ public class LoggedInUser {
     public LoggedInUser(String username, String displayName, String authToken) {
         this.username = username;
         this.displayName = displayName;
+        this.authToken = authToken;
     }
 
     public String getUsername() {

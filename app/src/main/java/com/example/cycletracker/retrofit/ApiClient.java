@@ -49,7 +49,7 @@ public class ApiClient {
     }
 
     public static void setAuthToken(String authToken) {
-        ApiClient.authToken = "Token "+authToken;
+        ApiClient.authToken = authToken;
         client = null;
     }
 

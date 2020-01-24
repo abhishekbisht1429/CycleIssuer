@@ -27,7 +27,7 @@ public class RemoteDataSource {
             if(loginResponse.isSuccessful()) {
                 LoginRespData loginRespData = loginResponse.body();
                 //Set auth token
-                ApiClient.setAuthToken(loginRespData.getAuthToken());
+                ApiClient.setAuthToken("Token "+loginRespData.getAuthToken());
                 Response<UserData> userDataResponse = ApiClient.getInstance().getCycleIssuerClient().fetchUserDetails().execute();
                 if(userDataResponse.isSuccessful()) {
                     UserData data = userDataResponse.body();
@@ -52,7 +52,8 @@ public class RemoteDataSource {
 
     public void logout(LoggedInUser user) {
         try {
-            ApiClient.getInstance().getCycleIssuerClient().logout(user.getAuthToken()).execute();
+            ApiClient.getInstance().getCycleIssuerClient().logout().execute();
+            ApiClient.setAuthToken(null);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
