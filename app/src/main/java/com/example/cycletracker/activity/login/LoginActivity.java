@@ -1,21 +1,15 @@
-package com.example.cycletracker.ui.login;
+package com.example.cycletracker.activity.login;
 
 import android.app.Activity;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.room.Room;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,8 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cycletracker.R;
-import com.example.cycletracker.activity.HomeActivity;
-import com.example.cycletracker.data.localdb.LocalDatabase;
+import com.example.cycletracker.activity.ViewModelFactory;
+import com.example.cycletracker.activity.home.HomeActivity;
+import com.example.cycletracker.activity.lock.LockActivity;
+import com.example.cycletracker.retrofit.ApiClient;
+import com.example.cycletracker.retrofit.models.BookedCycleResp;
+import com.example.cycletracker.util.WApiConsts;
+
+import java.util.concurrent.locks.Lock;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -46,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory(this.getApplication()))
+        loginViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(getApplication()))
                 .get(LoginViewModel.class);
 
         container = findViewById(R.id.container);
@@ -72,13 +76,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginResult == null) {
                     return;
                 }
-                showProgress(false);
                 if (loginResult.getError() != null) {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
                     updateUiWithUser(loginResult.getSuccess());
-                    finish();
                 }
                 setResult(Activity.RESULT_OK);
 
@@ -126,11 +128,41 @@ public class LoginActivity extends AppCompatActivity {
         loadingProgressBar.setVisibility(show?View.VISIBLE:View.GONE);
     }
 
+    private void startLockActivity(int cycleId) {
+        Intent intent = new Intent(this, LockActivity.class);
+        intent.putExtra(WApiConsts.JSON_KEY_CYCLE_ID, cycleId);
+        startActivity(intent);
+    }
+
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this, HomeActivity.class));
+        //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+        ApiClient.getInstance().getCycleIssuerClient().getBookedCycleId()
+                .enqueue(new Callback<BookedCycleResp>() {
+                    @Override
+                    public void onResponse(Call<BookedCycleResp> call, Response<BookedCycleResp> response) {
+                        showProgress(false);
+                        if(response.isSuccessful()) {
+                            BookedCycleResp resp = response.body();
+                            if(resp!=null && !resp.getCycleId().equals("")) {
+                                try {
+                                    int cycle_id = Integer.parseInt(resp.getCycleId());
+                                    startLockActivity(cycle_id);
+                                } catch(Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                            }
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BookedCycleResp> call, Throwable t) {
+                        showProgress(false);
+                        t.printStackTrace();
+                    }
+                });
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

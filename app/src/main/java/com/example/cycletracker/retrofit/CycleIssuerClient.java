@@ -1,5 +1,7 @@
 package com.example.cycletracker.retrofit;
 
+import com.example.cycletracker.retrofit.models.BookedCycleResp;
+import com.example.cycletracker.retrofit.models.GenericResponse;
 import com.example.cycletracker.retrofit.models.LoginRespData;
 import com.example.cycletracker.retrofit.models.UserData;
 import com.example.cycletracker.util.WApiConsts;
@@ -25,5 +27,17 @@ public interface CycleIssuerClient {
 
     @POST("auth/token/logout")
     Call<String> logout();
+
+    @FormUrlEncoded
+    @POST("cycle/book/")
+    Call<GenericResponse> book(@Field(WApiConsts.FORM_FIELD_QRCODE) String qrcode);
+
+    @GET("cycle/booked")
+    Call<BookedCycleResp> getBookedCycleId();
+
+    @FormUrlEncoded
+    @POST("cycle/lock")
+    Call<GenericResponse> lock(@Field(WApiConsts.JSON_KEY_CYCLE_ID) int cycleId,
+                               @Field(WApiConsts.JSON_KEY_LOCK_VALUE) int lock);
 
 }

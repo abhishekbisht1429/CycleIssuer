@@ -1,4 +1,4 @@
-package com.example.cycletracker.ui.login;
+package com.example.cycletracker.activity.login;
 
 import androidx.annotation.Nullable;
 

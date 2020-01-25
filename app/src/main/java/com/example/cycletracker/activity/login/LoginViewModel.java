@@ -1,4 +1,4 @@
-package com.example.cycletracker.ui.login;
+package com.example.cycletracker.activity.login;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,7 +20,7 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private DataRepository dataRepository;
 
-    LoginViewModel(Application application) {
+    public LoginViewModel(Application application) {
         this.dataRepository = DataRepository.getInstance(application);
         findLoggedInUser();
     }

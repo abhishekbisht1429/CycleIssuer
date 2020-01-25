@@ -5,6 +5,7 @@ import com.example.cycletracker.data.localdb.UserDao;
 import com.example.cycletracker.data.model.LoggedInUser;
 import com.example.cycletracker.data.model.User;
 import com.example.cycletracker.retrofit.ApiClient;
+import com.example.cycletracker.retrofit.models.GenericResponse;
 import com.example.cycletracker.retrofit.models.LoginRespData;
 import com.example.cycletracker.retrofit.models.UserData;
 
@@ -54,6 +55,14 @@ public class RemoteDataSource {
         try {
             ApiClient.getInstance().getCycleIssuerClient().logout().execute();
             ApiClient.setAuthToken(null);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public void lock(int cycleId, int lockVal) {
+        try {
+            ApiClient.getInstance().getCycleIssuerClient().lock(cycleId, lockVal).execute();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

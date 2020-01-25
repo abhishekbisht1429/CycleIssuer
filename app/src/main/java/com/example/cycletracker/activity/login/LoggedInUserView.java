@@ -1,4 +1,4 @@
-package com.example.cycletracker.ui.login;
+package com.example.cycletracker.activity.login;
 
 /**
  * Class exposing authenticated user details to the UI.
