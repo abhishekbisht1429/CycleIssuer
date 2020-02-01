@@ -8,9 +8,9 @@ import com.google.gson.annotations.SerializedName;
 public class BookedCycleResp extends GenericResponse {
 
     @SerializedName(WApiConsts.JSON_KEY_CYCLE_ID)
-    String cycleId;
+    Integer cycleId;
 
-    public String getCycleId() {
+    public Integer getCycleId() {
         return cycleId;
     }
 }

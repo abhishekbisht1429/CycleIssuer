@@ -10,6 +10,7 @@ import com.example.cycletracker.data.DataRepository;
 
 public class LockViewModel extends ViewModel {
     private MutableLiveData<Boolean> switchState = new MutableLiveData<>();
+    private MutableLiveData<Boolean> bookingState = new MutableLiveData<>();
     private int cycleId;
     private DataRepository dataRepository;
     public LockViewModel(Application application) {
@@ -34,7 +35,6 @@ public class LockViewModel extends ViewModel {
 
     public void lockStateChaged(int cycleId, boolean state) {
         switchState.setValue(state);
-        int lockVal = state?1:0;
-        lock(cycleId, lockVal);
+        lock(cycleId, state?1:0);
     }
 }

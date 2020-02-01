@@ -141,9 +141,9 @@ public class LoginActivity extends AppCompatActivity {
                         showProgress(false);
                         if(response.isSuccessful()) {
                             BookedCycleResp resp = response.body();
-                            if(resp!=null && !resp.getCycleId().equals("")) {
+                            if(resp!=null && resp.getCycleId()!=null) {
                                 try {
-                                    int cycle_id = Integer.parseInt(resp.getCycleId());
+                                    int cycle_id = resp.getCycleId();
                                     startLockActivity(cycle_id);
                                 } catch(Exception e) {
                                     e.printStackTrace();

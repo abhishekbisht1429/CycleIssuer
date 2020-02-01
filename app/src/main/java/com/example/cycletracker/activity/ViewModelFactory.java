@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.cycletracker.activity.home.HomeViewModel;
 import com.example.cycletracker.activity.lock.LockViewModel;
 import com.example.cycletracker.activity.login.LoginViewModel;
 
@@ -32,6 +33,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(modelClass.isAssignableFrom(LoginViewModel.class)) {
             return (T) new LoginViewModel(application);
+        } else if(modelClass.isAssignableFrom(HomeViewModel.class)) {
+            return (T) new HomeViewModel(application);
         }
         else if(modelClass.isAssignableFrom(LockViewModel.class)) {
             return (T) new LockViewModel(application);

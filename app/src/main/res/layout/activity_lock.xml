@@ -7,13 +7,24 @@
     tools:context=".activity.lock.LockActivity">
 
     <Button
-        android:id="@+id/btn_unlock"
+        android:id="@+id/btn_return_cycle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unlock"
+        android:text="return cycle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_unlock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Unlock"
+        app:layout_constraintBottom_toTopOf="@+id/btn_return_cycle"
+        app:layout_constraintEnd_toEndOf="@+id/btn_return_cycle"
+        app:layout_constraintHorizontal_bias="0.485"
+        app:layout_constraintStart_toStartOf="@+id/btn_return_cycle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
