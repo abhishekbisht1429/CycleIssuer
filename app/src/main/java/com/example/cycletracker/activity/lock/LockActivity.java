@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -14,14 +15,14 @@ import com.example.cycletracker.util.WApiConsts;
 
 public class LockActivity extends AppCompatActivity {
 
-    Switch lockSwitch;
+    Button unlockSwitch;
     LockViewModel viewModel;
     int cycleId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock);
-        lockSwitch = findViewById(R.id.switch_lock);
+        unlockSwitch = findViewById(R.id.btn_unlock);
         viewModel = ViewModelFactory.getInstance(getApplication()).create(LockViewModel.class);
 
         viewModel.getSwitchState().observe(this, (Boolean state)-> {
@@ -33,8 +34,8 @@ public class LockActivity extends AppCompatActivity {
             args = savedInstanceState;
         cycleId = args.getInt(WApiConsts.JSON_KEY_CYCLE_ID);
 
-        lockSwitch.setOnClickListener((View v)-> {
-            viewModel.lockStateChaged(cycleId, lockSwitch.isChecked());
+        unlockSwitch.setOnClickListener((View v)-> {
+            viewModel.lockStateChaged(cycleId, true);
         });
 
     }

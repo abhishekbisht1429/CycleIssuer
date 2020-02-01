@@ -30,8 +30,6 @@ import com.example.cycletracker.retrofit.ApiClient;
 import com.example.cycletracker.retrofit.models.BookedCycleResp;
 import com.example.cycletracker.util.WApiConsts;
 
-import java.util.concurrent.locks.Lock;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -167,5 +165,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+        showProgress(false);
     }
 }
