@@ -1,7 +1,8 @@
 package com.example.cycletracker.util;
 
 public interface WApiConsts {
-    String BASE_URL = "http://192.168.43.165/cycleissuer/";
+    String BASE_URL = "http://10.0.2.2:8000/cycleissuer/";
+//    String BASE_URL = "http://192.168.43.165:8000/cycleissuer/";
     String FORM_FIELD_USERNAME = "username";
     String FORM_FIELD_PASSWORD = "password";
 

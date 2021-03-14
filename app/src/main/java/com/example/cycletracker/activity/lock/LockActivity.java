@@ -24,6 +24,7 @@ import retrofit2.Response;
 public class LockActivity extends AppCompatActivity {
 
     Button unlockSwitch;
+    Button lockSwitch;
     Button returncycleBtn;
     LockViewModel viewModel;
     int cycleId;
@@ -32,6 +33,7 @@ public class LockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lock);
         unlockSwitch = findViewById(R.id.btn_unlock);
+        lockSwitch = findViewById(R.id.btn_lock);
         returncycleBtn = findViewById(R.id.btn_return_cycle);
         viewModel = ViewModelFactory.getInstance(getApplication()).create(LockViewModel.class);
 
@@ -46,6 +48,10 @@ public class LockActivity extends AppCompatActivity {
 
         unlockSwitch.setOnClickListener((View v)-> {
             viewModel.lockStateChaged(cycleId, true);
+        });
+
+        lockSwitch.setOnClickListener((View v) -> {
+            viewModel.lockStateChaged(cycleId, false);
         });
 
         returncycleBtn.setOnClickListener((View view)-> {

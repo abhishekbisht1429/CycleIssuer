@@ -27,4 +27,14 @@
         app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="@+id/btn_return_cycle" />
 
+    <Button
+        android:id="@+id/btn_lock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Lock"
+        app:layout_constraintBottom_toTopOf="@+id/btn_unlock"
+        app:layout_constraintEnd_toEndOf="@+id/btn_unlock"
+        app:layout_constraintStart_toStartOf="@+id/btn_unlock" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
