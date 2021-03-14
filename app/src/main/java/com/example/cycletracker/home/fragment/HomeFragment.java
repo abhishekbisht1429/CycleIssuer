@@ -1,4 +1,4 @@
-package com.example.cycletracker.fragment;
+package com.example.cycletracker.home.fragment;
 
 import android.os.Bundle;
 

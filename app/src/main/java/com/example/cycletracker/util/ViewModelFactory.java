@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity;
+package com.example.cycletracker.util;
 
 
 import android.app.Application;
@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.cycletracker.activity.home.HomeViewModel;
-import com.example.cycletracker.activity.lock.LockViewModel;
-import com.example.cycletracker.activity.login.LoginViewModel;
+import com.example.cycletracker.home.viewmodel.HomeViewModel;
+import com.example.cycletracker.lock.viewmodel.LockViewModel;
+import com.example.cycletracker.login.viewmodel.LoginViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 

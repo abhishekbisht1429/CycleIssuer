@@ -5,7 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.cycletracker.data.model.LoggedInUser;
+import com.example.cycletracker.model.LoggedInUser;
 
 @Dao
 public interface UserDao {

@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity.lock;
+package com.example.cycletracker.lock.viewmodel;
 
 import android.app.Application;
 import android.os.AsyncTask;

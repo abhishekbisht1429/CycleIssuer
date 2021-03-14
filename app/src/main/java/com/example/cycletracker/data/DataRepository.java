@@ -3,7 +3,8 @@ package com.example.cycletracker.data;
 import android.app.Application;
 
 import com.example.cycletracker.data.localdb.LocalDatabase;
-import com.example.cycletracker.data.model.LoggedInUser;
+import com.example.cycletracker.data.model.Result;
+import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.retrofit.ApiClient;
 
 /**

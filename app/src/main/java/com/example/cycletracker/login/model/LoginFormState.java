@@ -1,40 +1,40 @@
-package com.example.cycletracker.activity.login;
+package com.example.cycletracker.login.model;
 
 import androidx.annotation.Nullable;
 
 /**
  * Data validation state of the fetchUserDetails form.
  */
-class LoginFormState {
+public class LoginFormState {
     @Nullable
     private Integer usernameError;
     @Nullable
     private Integer passwordError;
     private boolean isDataValid;
 
-    LoginFormState(@Nullable Integer usernameError, @Nullable Integer passwordError) {
+    public LoginFormState(@Nullable Integer usernameError, @Nullable Integer passwordError) {
         this.usernameError = usernameError;
         this.passwordError = passwordError;
         this.isDataValid = false;
     }
 
-    LoginFormState(boolean isDataValid) {
+    public LoginFormState(boolean isDataValid) {
         this.usernameError = null;
         this.passwordError = null;
         this.isDataValid = isDataValid;
     }
 
     @Nullable
-    Integer getUsernameError() {
+    public Integer getUsernameError() {
         return usernameError;
     }
 
     @Nullable
-    Integer getPasswordError() {
+    public Integer getPasswordError() {
         return passwordError;
     }
 
-    boolean isDataValid() {
+    public boolean isDataValid() {
         return isDataValid;
     }
 }

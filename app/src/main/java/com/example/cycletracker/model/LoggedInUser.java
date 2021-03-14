@@ -1,4 +1,4 @@
-package com.example.cycletracker.data.model;
+package com.example.cycletracker.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

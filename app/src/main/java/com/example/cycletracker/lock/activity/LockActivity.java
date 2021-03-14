@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity.lock;
+package com.example.cycletracker.lock.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.cycletracker.R;
-import com.example.cycletracker.activity.ViewModelFactory;
+import com.example.cycletracker.lock.viewmodel.LockViewModel;
+import com.example.cycletracker.util.ViewModelFactory;
 import com.example.cycletracker.retrofit.ApiClient;
 import com.example.cycletracker.retrofit.models.GenericResponse;
 import com.example.cycletracker.util.WApiConsts;
-
-import java.util.concurrent.locks.Lock;
 
 import retrofit2.Call;
 import retrofit2.Callback;

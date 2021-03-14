@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity.login;
+package com.example.cycletracker.login.activity;
 
 import android.app.Activity;
 
@@ -23,9 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cycletracker.R;
-import com.example.cycletracker.activity.ViewModelFactory;
-import com.example.cycletracker.activity.home.HomeActivity;
-import com.example.cycletracker.activity.lock.LockActivity;
+import com.example.cycletracker.login.model.LoginFormState;
+import com.example.cycletracker.login.model.LoginResult;
+import com.example.cycletracker.login.viewmodel.LoginViewModel;
+import com.example.cycletracker.model.LoggedInUser;
+import com.example.cycletracker.util.ViewModelFactory;
+import com.example.cycletracker.home.activity.HomeActivity;
+import com.example.cycletracker.lock.activity.LockActivity;
 import com.example.cycletracker.retrofit.ApiClient;
 import com.example.cycletracker.retrofit.models.BookedCycleResp;
 import com.example.cycletracker.util.WApiConsts;
@@ -132,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
+    private void updateUiWithUser(LoggedInUser model) {
         //startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         ApiClient.getInstance().getCycleIssuerClient().getBookedCycleId()
                 .enqueue(new Callback<BookedCycleResp>() {

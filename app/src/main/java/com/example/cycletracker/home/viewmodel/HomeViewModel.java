@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity.home;
+package com.example.cycletracker.home.viewmodel;
 
 import android.app.Application;
 import android.os.AsyncTask;

@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity.login;
+package com.example.cycletracker.login.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,9 +10,11 @@ import android.os.AsyncTask;
 import android.util.Patterns;
 
 import com.example.cycletracker.data.DataRepository;
-import com.example.cycletracker.data.Result;
-import com.example.cycletracker.data.model.LoggedInUser;
+import com.example.cycletracker.data.model.Result;
+import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.R;
+import com.example.cycletracker.login.model.LoginFormState;
+import com.example.cycletracker.login.model.LoginResult;
 
 public class LoginViewModel extends ViewModel {
 
@@ -25,11 +27,11 @@ public class LoginViewModel extends ViewModel {
         findLoggedInUser();
     }
 
-    LiveData<LoginFormState> getLoginFormState() {
+    public LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
     }
 
-    LiveData<LoginResult> getLoginResult() {
+    public LiveData<LoginResult> getLoginResult() {
         return loginResult;
     }
 
@@ -85,7 +87,7 @@ public class LoginViewModel extends ViewModel {
     private void setLoginResult(Result<LoggedInUser> result) {
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            loginResult.setValue(new LoginResult(data));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }

@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity;
+package com.example.cycletracker.home.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.example.cycletracker.R;
-import com.example.cycletracker.activity.login.LoginActivity;
+import com.example.cycletracker.login.activity.LoginActivity;
 
 public class SplashActiivity extends AppCompatActivity {
 

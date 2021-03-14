@@ -1,17 +1,12 @@
 package com.example.cycletracker.data;
 
-import com.example.cycletracker.data.localdb.LocalDatabase;
-import com.example.cycletracker.data.localdb.UserDao;
-import com.example.cycletracker.data.model.LoggedInUser;
-import com.example.cycletracker.data.model.User;
+import com.example.cycletracker.data.model.Result;
+import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.retrofit.ApiClient;
-import com.example.cycletracker.retrofit.models.GenericResponse;
 import com.example.cycletracker.retrofit.models.LoginRespData;
 import com.example.cycletracker.retrofit.models.UserData;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Response;
 

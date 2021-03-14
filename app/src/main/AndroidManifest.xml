@@ -14,12 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.lock.LockActivity" />
-        <activity android:name=".activity.home.HomeActivity" />
+        <activity android:name=".lock.activity.LockActivity" />
+        <activity android:name=".home.activity.HomeActivity" />
         <activity
-            android:name=".activity.login.LoginActivity"
+            android:name=".login.activity.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".activity.SplashActiivity">
+        <activity android:name=".home.activity.SplashActiivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

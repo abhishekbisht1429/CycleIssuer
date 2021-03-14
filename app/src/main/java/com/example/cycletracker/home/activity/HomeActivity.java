@@ -1,4 +1,4 @@
-package com.example.cycletracker.activity.home;
+package com.example.cycletracker.home.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +15,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.cycletracker.R;
-import com.example.cycletracker.activity.ViewModelFactory;
-import com.example.cycletracker.activity.lock.LockActivity;
-import com.example.cycletracker.fragment.HistoryFragment;
-import com.example.cycletracker.fragment.HomeFragment;
+import com.example.cycletracker.home.viewmodel.HomeViewModel;
+import com.example.cycletracker.util.ViewModelFactory;
+import com.example.cycletracker.lock.activity.LockActivity;
+import com.example.cycletracker.home.fragment.HistoryFragment;
+import com.example.cycletracker.home.fragment.HomeFragment;
 import com.example.cycletracker.retrofit.ApiClient;
 import com.example.cycletracker.retrofit.models.BookedCycleResp;
 import com.example.cycletracker.util.WApiConsts;
