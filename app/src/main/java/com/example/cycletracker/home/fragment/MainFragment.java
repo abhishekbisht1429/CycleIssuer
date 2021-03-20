@@ -33,16 +33,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainFragment extends HomeBaseFragment implements Toolbar.OnMenuItemClickListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainFragment extends HomeBaseFragment implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
     private ViewPager2 viewPager2;
     private ViewPagerAdapter pagerAdapter;
     private BottomNavigationView bottomNavView;
     private NavController navController;
-
-    @Inject
-    LoggedInUserViewModel loggedInUserViewModel;
 
     public MainFragment() {
         // Required empty public constructor
@@ -81,23 +78,7 @@ public class MainFragment extends HomeBaseFragment implements Toolbar.OnMenuItem
 
         bottomNavView.setOnNavigationItemSelectedListener(this);
 
-        loggedInUserViewModel.getLoggedInUser().observe(this.getViewLifecycleOwner(), (LoggedInUser user)-> {
-            if(user==null) {
-                Toast.makeText(getContext(), "logged out", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         return view;
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.menu_home_activity_action_qrscan) {
-            IntentIntegrator.forSupportFragment(this).initiateScan();
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override
@@ -123,41 +104,7 @@ public class MainFragment extends HomeBaseFragment implements Toolbar.OnMenuItem
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                Toast.makeText(MainFragment.this.getContext(), "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                String qrcode = result.getContents();
-                Toast.makeText(MainFragment.this.getContext(), "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                ApiClient.getInstance().getCycleIssuerClient().book(qrcode)
-                        .enqueue(new Callback<BookedCycleResp>() {
-                            @Override
-                            public void onResponse(Call<BookedCycleResp> call, Response<BookedCycleResp> response) {
-                                if(response.isSuccessful()) {
-                                    BookedCycleResp res = response.body();
-                                    if(res!=null) {
-                                        if(response.code()==200) {
-//                                            startLockActivity(res.getCycleId());
-                                        } else {
-                                            Toast.makeText(MainFragment.this.getContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            }
 
-                            @Override
-                            public void onFailure(Call<BookedCycleResp> call, Throwable t) {
-                                t.printStackTrace();
-                            }
-                        });
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 
     private static class ViewPagerAdapter extends FragmentStateAdapter {
         private static final int PAGE_NUM = 3;
