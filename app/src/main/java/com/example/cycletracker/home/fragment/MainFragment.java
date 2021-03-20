@@ -18,12 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.cycletracker.MyApplication;
 import com.example.cycletracker.R;
 import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.retrofit.ApiClient;
 import com.example.cycletracker.retrofit.model.BookedCycleResp;
-import com.example.cycletracker.util.Utility;
 import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;

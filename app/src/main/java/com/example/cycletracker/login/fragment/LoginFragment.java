@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -23,7 +22,6 @@ import com.example.cycletracker.R;
 import com.example.cycletracker.login.model.LoginFormState;
 import com.example.cycletracker.login.viewmodel.LoginViewModel;
 import com.example.cycletracker.model.LoggedInUser;
-import com.example.cycletracker.util.Utility;
 import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
 
 import javax.inject.Inject;

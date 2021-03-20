@@ -9,14 +9,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.cycletracker.MyApplication;
 import com.example.cycletracker.R;
 import com.example.cycletracker.model.LoggedInUser;
-import com.example.cycletracker.util.Utility;
 import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
 
 import javax.inject.Inject;

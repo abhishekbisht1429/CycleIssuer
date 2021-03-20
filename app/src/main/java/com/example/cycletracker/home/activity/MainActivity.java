@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.example.cycletracker.R;
 import com.example.cycletracker.lock.activity.LockActivity;
-import com.example.cycletracker.util.Utility;
 import com.example.cycletracker.util.WApiConsts;
 
 public class MainActivity extends AppCompatActivity {
