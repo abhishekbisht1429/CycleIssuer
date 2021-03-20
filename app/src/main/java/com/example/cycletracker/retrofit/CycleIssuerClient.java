@@ -1,21 +1,22 @@
 package com.example.cycletracker.retrofit;
 
-import com.example.cycletracker.retrofit.models.BookedCycleResp;
-import com.example.cycletracker.retrofit.models.GenericResponse;
-import com.example.cycletracker.retrofit.models.LoginRespData;
-import com.example.cycletracker.retrofit.models.UserData;
+import com.example.cycletracker.retrofit.model.BookedCycleResp;
+import com.example.cycletracker.retrofit.model.GenericResponse;
+import com.example.cycletracker.retrofit.model.LoginRespData;
+import com.example.cycletracker.retrofit.model.UserData;
 import com.example.cycletracker.util.WApiConsts;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface CycleIssuerClient {
 
     @GET("auth/users/me/")
-    Call<UserData> fetchUserDetails();
+    Call<UserData> fetchUserDetails(@Header("Authorization") String authToken);
 
     @FormUrlEncoded
     @POST("auth/token/login")
@@ -23,7 +24,7 @@ public interface CycleIssuerClient {
                               @Field(WApiConsts.FORM_FIELD_PASSWORD) String password);
 
     @POST("auth/token/logout")
-    Call<String> logout();
+    Call<String> logout(@Header("Authorization") String authToken);
 
     @FormUrlEncoded
     @POST("cycle/book")

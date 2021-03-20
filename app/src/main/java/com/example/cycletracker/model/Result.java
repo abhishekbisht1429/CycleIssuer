@@ -1,4 +1,4 @@
-package com.example.cycletracker.data.model;
+package com.example.cycletracker.model;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.

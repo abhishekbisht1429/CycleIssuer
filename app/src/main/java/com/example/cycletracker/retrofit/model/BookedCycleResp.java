@@ -1,6 +1,4 @@
-package com.example.cycletracker.retrofit.models;
-
-import android.net.wifi.WpsInfo;
+package com.example.cycletracker.retrofit.model;
 
 import com.example.cycletracker.util.WApiConsts;
 import com.google.gson.annotations.SerializedName;

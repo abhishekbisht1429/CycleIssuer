@@ -5,20 +5,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-/**
- * Data class that captures user information for logged in users retrieved from DataRepository
- */
-@Entity
 public class LoggedInUser {
 
-    @PrimaryKey
-    @NonNull
+
     private String username;
 
-    @ColumnInfo(name = "display_name")
     private String displayName;
 
-    @ColumnInfo(name = "auth_token")
     private String authToken;
 
     public LoggedInUser(String username, String displayName, String authToken) {
@@ -26,7 +19,6 @@ public class LoggedInUser {
         this.displayName = displayName;
         this.authToken = authToken;
     }
-
     public String getUsername() {
         return username;
     }
@@ -38,4 +30,33 @@ public class LoggedInUser {
     public String getAuthToken() {
         return authToken;
     }
+
+//    private static class Builder {
+//        private String username;
+//        private String displayName;
+//        private String authToken;
+//
+//        public LoggedInUser build(){
+//            LoggedInUser loggedInUser = new LoggedInUser();
+//
+//            loggedInUser.username = username;
+//            loggedInUser.displayName = displayName;
+//            loggedInUser.authToken = authToken;
+//
+//            return loggedInUser;
+//        }
+//
+//        public Builder username(String username) {
+//            this.username = username;
+//            return this;
+//        }
+//
+//        public Builder displayName(String displayName) {
+//            this.displayName = displayName;
+//
+//            return this;
+//        }
+//
+//        public Builder authToken()
+//    }
 }

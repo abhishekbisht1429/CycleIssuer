@@ -1,11 +1,13 @@
 package com.example.cycletracker.data;
 
-import android.app.Application;
-
-import com.example.cycletracker.data.localdb.LocalDatabase;
-import com.example.cycletracker.data.model.Result;
+import com.example.cycletracker.data.localds.LocalDataSource;
+import com.example.cycletracker.data.localds.entity.LoggedInUserEntity;
+import com.example.cycletracker.model.Result;
+import com.example.cycletracker.data.remoteds.RemoteDataSource;
 import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.retrofit.ApiClient;
+
+import javax.inject.Inject;
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -16,62 +18,55 @@ public class DataRepository {
     private static final String USERNAME_KEY = "user name preference key";
     private static final String AUTH_TOKEN_KEY = "auth token preference key";
 
-    private static volatile DataRepository instance;
+    private final RemoteDataSource remoteDataSource;
+    private final LocalDataSource localDataSource;
 
-    private RemoteDataSource dataSource;
-    private LocalDatabase database;
-
-    private LoggedInUser user = null;
-
-    // private constructor : singleton access
-    private DataRepository(Application application) {
-        dataSource = new RemoteDataSource();
-        database = LocalDatabase.getInstance(application);
+    @Inject
+    public DataRepository(LocalDataSource localDataSource, RemoteDataSource remoteDataSource) {
+        this.remoteDataSource = remoteDataSource;
+        this.localDataSource = localDataSource;
     }
 
-    public static DataRepository getInstance(Application application) {
-        if (instance == null) {
-            instance = new DataRepository(application);
+    public Result<String> logout(LoggedInUser loggedInUser) {
+        Result<String> res = remoteDataSource.logout(loggedInUser);
+
+        if(res instanceof Result.Success) {
+            LoggedInUserEntity loggedInUserEntity = new LoggedInUserEntity(loggedInUser.getUsername(),
+                    loggedInUser.getDisplayName(),
+                    loggedInUser.getAuthToken());
+            localDataSource.getUserDao().deleteLoggedInUser(loggedInUserEntity);
         }
-        return instance;
+
+        return res;
     }
 
-    public boolean isLoggedIn() {
-        return user != null;
-    }
-
-    public void logout() {
-        dataSource.logout(user);
-        database.getUserDao().deleteLoggedInUser(user);
-        user = null;
-    }
-
-    private void setLoggedInUser(LoggedInUser user) {
-        this.user = user;
-    }
 
     public Result<LoggedInUser> login(String username, String password) {
-        Result<LoggedInUser> result = dataSource.login(username, password);
+        Result<LoggedInUser> result = remoteDataSource.login(username, password);
         if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
-            database.getUserDao().saveLoggedInUser(user);
+            LoggedInUser loggedInUser = ((Result.Success<LoggedInUser>)result).getData();
+
+            LoggedInUserEntity loggedInUserEntity = new LoggedInUserEntity(loggedInUser.getUsername(),
+                    loggedInUser.getDisplayName(),
+                    loggedInUser.getAuthToken());
+            localDataSource.getUserDao().saveLoggedInUser(loggedInUserEntity);
         }
         return result;
     }
 
     public Result<LoggedInUser> findLoggedInUser() {
-        LoggedInUser user = database.getUserDao().findLoggedInUser();
-        if(user!=null) {
-            //Set auth token
-            ApiClient.setAuthToken("Token "+user.getAuthToken());
-            setLoggedInUser(user);
-            return new Result.Success<LoggedInUser>(user);
+        LoggedInUserEntity userEntity = localDataSource.getUserDao().findLoggedInUser();
+        if(userEntity!=null) {
+            LoggedInUser loggedInUser = new LoggedInUser(userEntity.getUsername(),
+                    userEntity.getDisplayName(),
+                    userEntity.getAuthToken());
+            return new Result.Success<LoggedInUser>(loggedInUser);
         } else {
             return new Result.Error(new Exception("No Logged in user found"));
         }
     }
 
     public void lock(int cycleId, int lockVal) {
-        dataSource.lock(cycleId, lockVal);
+        remoteDataSource.lock(cycleId, lockVal);
     }
 }

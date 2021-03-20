@@ -8,13 +8,21 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.cycletracker.data.DataRepository;
 
+import java.util.concurrent.ExecutorService;
+
+import javax.inject.Inject;
+
 public class LockViewModel extends ViewModel {
     private MutableLiveData<Boolean> switchState = new MutableLiveData<>();
     private MutableLiveData<Boolean> bookingState = new MutableLiveData<>();
     private int cycleId;
     private DataRepository dataRepository;
-    public LockViewModel(Application application) {
-        dataRepository = DataRepository.getInstance(application);
+    private ExecutorService executorService;
+
+    @Inject
+    public LockViewModel(DataRepository dataRepository, ExecutorService executorService) {
+        this.dataRepository = dataRepository;
+        this.executorService = executorService;
     }
 
     public MutableLiveData<Boolean> getSwitchState() {
@@ -22,15 +30,9 @@ public class LockViewModel extends ViewModel {
     }
 
     private void lock(int cycleId, int lockVal) {
-        new AsyncTask<Integer, Void, Void>() {
-            @Override
-            protected Void doInBackground(Integer... integers) {
-                int cycleId = integers[0];
-                int lockVal = integers[1];
-                dataRepository.lock(cycleId, lockVal);
-                return null;
-            }
-        }.execute(cycleId, lockVal);
+        executorService.submit(()-> {
+            dataRepository.lock(cycleId, lockVal);
+        });
     }
 
     public void lockStateChaged(int cycleId, boolean state) {

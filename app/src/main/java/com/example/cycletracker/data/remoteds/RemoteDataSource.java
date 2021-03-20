@@ -1,12 +1,14 @@
-package com.example.cycletracker.data;
+package com.example.cycletracker.data.remoteds;
 
-import com.example.cycletracker.data.model.Result;
+import com.example.cycletracker.model.Result;
 import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.retrofit.ApiClient;
-import com.example.cycletracker.retrofit.models.LoginRespData;
-import com.example.cycletracker.retrofit.models.UserData;
+import com.example.cycletracker.retrofit.model.LoginRespData;
+import com.example.cycletracker.retrofit.model.UserData;
 
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 import retrofit2.Response;
 
@@ -14,22 +16,29 @@ import retrofit2.Response;
  * Class that handles authentication w/ fetchUserDetails credentials and retrieves user information.
  */
 public class RemoteDataSource {
+    
+    private ApiClient apiClient;
+    
+    @Inject
+    public RemoteDataSource(ApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
 
     public Result<LoggedInUser> login(String username, String password) {
         Result<LoggedInUser> result;
         try {
-
-            Response<LoginRespData> loginResponse = ApiClient.getInstance().getCycleIssuerClient().login(username, password).execute();
+            Response<LoginRespData> loginResponse = apiClient.getCycleIssuerClient().login(username, password).execute();
             if(loginResponse.isSuccessful()) {
                 LoginRespData loginRespData = loginResponse.body();
                 //Set auth token
-                ApiClient.setAuthToken("Token "+loginRespData.getAuthToken());
-                Response<UserData> userDataResponse = ApiClient.getInstance().getCycleIssuerClient().fetchUserDetails().execute();
+//                ApiClient.setAuthToken("Token "+loginRespData.getAuthToken());
+                String authToken = "Token "+loginRespData.getAuthToken();
+                Response<UserData> userDataResponse = apiClient.getCycleIssuerClient().fetchUserDetails(authToken).execute();
                 if(userDataResponse.isSuccessful()) {
                     UserData data = userDataResponse.body();
                     //TODO: retrive other fields as well from the loginResponseData
                     if(loginRespData!=null && data!=null) {
-                        LoggedInUser user = new LoggedInUser(data.getUsername(), data.getFirstName() + " " + data.getLastName(), loginRespData.getAuthToken());
+                        LoggedInUser user = new LoggedInUser(data.getUsername(), data.getFirstName() + " " + data.getLastName(), authToken);
                         result = new Result.Success<LoggedInUser>(user);
                     } else {
                         result = new Result.Error(new Exception("Data is null. Code : "+loginResponse.code()+" "+userDataResponse.code()));
@@ -46,18 +55,26 @@ public class RemoteDataSource {
         return result;
     }
 
-    public void logout(LoggedInUser user) {
+    public Result<String> logout(LoggedInUser user) {
+        Result<String> result;
         try {
-            ApiClient.getInstance().getCycleIssuerClient().logout().execute();
-            ApiClient.setAuthToken(null);
+            Response<String> response = apiClient.getCycleIssuerClient().logout(user.getAuthToken()).execute();
+            if(response.isSuccessful()) {
+                result = new Result.Success<String>(response.body());
+            } else {
+                result = new Result.Error(new Exception("Failed to logout. Error code : "+response.code()));
+            }
         } catch (IOException ioe) {
             ioe.printStackTrace();
+            result = new Result.Error(ioe);
         }
+
+        return result;
     }
 
     public void lock(int cycleId, int lockVal) {
         try {
-            ApiClient.getInstance().getCycleIssuerClient().lock(cycleId, lockVal).execute();
+            apiClient.getCycleIssuerClient().lock(cycleId, lockVal).execute();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

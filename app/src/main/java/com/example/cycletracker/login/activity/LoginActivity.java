@@ -1,38 +1,31 @@
 package com.example.cycletracker.login.activity;
 
-import android.app.Activity;
-
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cycletracker.R;
 import com.example.cycletracker.login.model.LoginFormState;
-import com.example.cycletracker.login.model.LoginResult;
 import com.example.cycletracker.login.viewmodel.LoginViewModel;
 import com.example.cycletracker.model.LoggedInUser;
-import com.example.cycletracker.util.ViewModelFactory;
-import com.example.cycletracker.home.activity.HomeActivity;
+import com.example.cycletracker.home.activity.MainActivity;
 import com.example.cycletracker.lock.activity.LockActivity;
 import com.example.cycletracker.retrofit.ApiClient;
-import com.example.cycletracker.retrofit.models.BookedCycleResp;
+import com.example.cycletracker.retrofit.model.BookedCycleResp;
 import com.example.cycletracker.util.WApiConsts;
+import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,7 +34,13 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     public static final String LOGIN_PREFERENCES = "login preferences";
-    private LoginViewModel loginViewModel;
+
+    @Inject
+    LoginViewModel loginViewModel;
+
+    @Inject
+    LoggedInUserViewModel loggedInUserViewModel;
+
     private View container;
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -51,9 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        loginViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance(getApplication()))
-                .get(LoginViewModel.class);
+        setContentView(R.layout.fragment_login);
 
         container = findViewById(R.id.container);
         usernameEditText = findViewById(R.id.username);
@@ -74,19 +71,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
         });
 
-        loginViewModel.getLoginResult().observe(this, (@Nullable LoginResult loginResult) -> {
-                if (loginResult == null) {
-                    return;
+        loggedInUserViewModel.getLoggedInUser().observe(this, (@Nullable LoggedInUser loggedInUser) -> {
+                if(loggedInUser != null) {
+                    updateUiWithUser(loggedInUser);
+                } else {
+                    showLoginFailed();
                 }
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy fetchUserDetails activity once successful
         });
 
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -109,16 +99,16 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
 
-        passwordEditText.setOnEditorActionListener((TextView v, int actionId, KeyEvent event)->{
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-            }
-            return false;
-        });
+//        passwordEditText.setOnEditorActionListener((TextView v, int actionId, KeyEvent event)->{
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                loggedInUserViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+//            }
+//            return false;
+//        });
 
         loginButton.setOnClickListener((View v) -> {
             showProgress(true);
-            loginViewModel.login(usernameEditText.getText().toString(),
+            loggedInUserViewModel.login(usernameEditText.getText().toString(),
                     passwordEditText.getText().toString());
         });
     }
@@ -153,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             } else {
-                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }
                             finish();
                         }
@@ -167,8 +157,8 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    private void showLoginFailed() {
+        Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT).show();
         showProgress(false);
     }
 }

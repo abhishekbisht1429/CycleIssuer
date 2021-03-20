@@ -2,9 +2,13 @@ package com.example.cycletracker.retrofit;
 
 import android.app.Application;
 
+import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.util.WApiConsts;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -17,20 +21,12 @@ public class ApiClient {
     private static ApiClient client;
     private CycleIssuerClient cycleIssuerClient;
     private static String authToken;
-    private ApiClient() {
+
+    public ApiClient() {
         if(retrofit == null) {
             OkHttpClient client = new OkHttpClient.Builder()
                     .connectTimeout(20, TimeUnit.SECONDS)
                     .readTimeout(20, TimeUnit.SECONDS)
-                    .addInterceptor((Interceptor.Chain chain)->{
-                        Request request = chain.request();
-                        if(authToken!=null) {
-                            request = request.newBuilder()
-                                    .addHeader("Authorization", authToken)
-                                    .build();
-                        }
-                        return chain.proceed(request);
-                            })
                     .build();
 
             retrofit = new Retrofit.Builder()

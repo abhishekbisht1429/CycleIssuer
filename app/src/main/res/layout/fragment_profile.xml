@@ -2,29 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout_home_frag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.fragment.HomeFragment">
+    tools:context=".home.fragment.ProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/text_view_home_frag"
+        android:id="@+id/text_view_name_profile_frag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="236dp"
-        android:text="No Cycles Issued"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:layout_marginTop="204dp"
+        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="205dp"
-        android:layout_height="58dp"
-        android:layout_marginBottom="220dp"
-        android:text="Scan"
+        android:id="@+id/btn_logout_profile_frag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_name_profile_frag" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

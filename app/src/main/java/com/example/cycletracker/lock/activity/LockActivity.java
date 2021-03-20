@@ -10,10 +10,11 @@ import android.widget.Toast;
 
 import com.example.cycletracker.R;
 import com.example.cycletracker.lock.viewmodel.LockViewModel;
-import com.example.cycletracker.util.ViewModelFactory;
 import com.example.cycletracker.retrofit.ApiClient;
-import com.example.cycletracker.retrofit.models.GenericResponse;
+import com.example.cycletracker.retrofit.model.GenericResponse;
 import com.example.cycletracker.util.WApiConsts;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,7 +25,10 @@ public class LockActivity extends AppCompatActivity {
     Button unlockSwitch;
     Button lockSwitch;
     Button returncycleBtn;
-    LockViewModel viewModel;
+
+    @Inject
+    LockViewModel lockViewModel;
+
     int cycleId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +37,8 @@ public class LockActivity extends AppCompatActivity {
         unlockSwitch = findViewById(R.id.btn_unlock);
         lockSwitch = findViewById(R.id.btn_lock);
         returncycleBtn = findViewById(R.id.btn_return_cycle);
-        viewModel = ViewModelFactory.getInstance(getApplication()).create(LockViewModel.class);
 
-        viewModel.getSwitchState().observe(this, (Boolean state)-> {
+        lockViewModel.getSwitchState().observe(this, (Boolean state)-> {
             Toast.makeText(this, state+"", Toast.LENGTH_SHORT).show();
         });
 
@@ -45,11 +48,11 @@ public class LockActivity extends AppCompatActivity {
         cycleId = args.getInt(WApiConsts.JSON_KEY_CYCLE_ID);
 
         unlockSwitch.setOnClickListener((View v)-> {
-            viewModel.lockStateChaged(cycleId, true);
+            lockViewModel.lockStateChaged(cycleId, true);
         });
 
         lockSwitch.setOnClickListener((View v) -> {
-            viewModel.lockStateChaged(cycleId, false);
+            lockViewModel.lockStateChaged(cycleId, false);
         });
 
         returncycleBtn.setOnClickListener((View view)-> {

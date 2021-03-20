@@ -12,4 +12,10 @@
         android:icon="@drawable/history"
         android:title="History"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_profile_bottom_nav_activity_home"
+        android:icon="@drawable/user"
+        android:title="Profile"
+        android:visible="true"
+        app:showAsAction="always" />
 </menu>

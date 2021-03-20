@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_bike"
@@ -15,17 +16,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".lock.activity.LockActivity" />
-        <activity android:name=".home.activity.HomeActivity" />
-        <activity
-            android:name=".login.activity.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".home.activity.SplashActiivity">
+        <activity android:name=".home.activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".login.activity.LoginActivity"
+            android:label="@string/title_activity_login" />
     </application>
 
 </manifest>

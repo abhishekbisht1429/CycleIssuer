@@ -1,20 +1,30 @@
 package com.example.cycletracker.home.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.cycletracker.MyApplication;
 import com.example.cycletracker.R;
+import com.example.cycletracker.util.Utility;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends HomeBaseFragment {
 
 
     public HomeFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        getHomeSubComponent().inject(this);
+        super.onAttach(context);
     }
 
     public static HomeFragment newInstance() {

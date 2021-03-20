@@ -1,4 +1,4 @@
-package com.example.cycletracker.retrofit.models;
+package com.example.cycletracker.retrofit.model;
 
 import com.example.cycletracker.util.WApiConsts;
 import com.google.gson.annotations.SerializedName;
