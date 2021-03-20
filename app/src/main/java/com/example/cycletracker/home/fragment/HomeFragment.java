@@ -14,18 +14,24 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.cycletracker.R;
-import com.example.cycletracker.retrofit.ApiClient;
-import com.example.cycletracker.retrofit.model.BookedCycleResp;
+import com.example.cycletracker.home.model.Bicycle;
+import com.example.cycletracker.home.viewmodel.BicycleViewModel;
+import com.example.cycletracker.model.LoggedInUser;
+import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import javax.inject.Inject;
 
 public class HomeFragment extends HomeBaseFragment {
 
     private Button scanButton;
+
+    @Inject
+    LoggedInUserViewModel loggedInUserViewModel;
+
+    @Inject
+    BicycleViewModel bicycleViewModel;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -57,6 +63,14 @@ public class HomeFragment extends HomeBaseFragment {
         scanButton.setOnClickListener((View v)-> {
             IntentIntegrator.forSupportFragment(this).initiateScan();
         });
+
+        bicycleViewModel.getCycleLiveData().observe(this.getViewLifecycleOwner(), (Bicycle bicycle) -> {
+            if(bicycle == null) {
+
+            } else {
+
+            }
+        });
         return view;
     }
 
@@ -69,27 +83,12 @@ public class HomeFragment extends HomeBaseFragment {
             } else {
                 String qrcode = result.getContents();
                 Toast.makeText(this.getContext(), "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                ApiClient.getInstance().getCycleIssuerClient().book(qrcode)
-                        .enqueue(new Callback<BookedCycleResp>() {
-                            @Override
-                            public void onResponse(Call<BookedCycleResp> call, Response<BookedCycleResp> response) {
-                                if(response.isSuccessful()) {
-                                    BookedCycleResp res = response.body();
-                                    if(res!=null) {
-                                        if(response.code()==200) {
-//                                            startLockActivity(res.getCycleId());
-                                        } else {
-                                            Toast.makeText(HomeFragment.this.getContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<BookedCycleResp> call, Throwable t) {
-                                t.printStackTrace();
-                            }
-                        });
+                LoggedInUser loggedInUser = loggedInUserViewModel.getLoggedInUser().getValue();
+                if(loggedInUser!=null) {
+                    bicycleViewModel.bookCycle(qrcode, loggedInUser.getAuthToken());
+                } else {
+                    Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

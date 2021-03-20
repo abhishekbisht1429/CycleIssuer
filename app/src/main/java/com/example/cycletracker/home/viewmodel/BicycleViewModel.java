@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.cycletracker.data.DataRepository;
 import com.example.cycletracker.home.dagger.HomeScope;
-import com.example.cycletracker.home.model.Cycle;
+import com.example.cycletracker.home.model.Bicycle;
+import com.example.cycletracker.model.Result;
 
 import java.util.concurrent.ExecutorService;
 
@@ -18,7 +19,7 @@ public class BicycleViewModel extends ViewModel {
     private DataRepository dataRepository;
     private ExecutorService executorService;
 
-    MutableLiveData<Cycle> cycleMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<Bicycle> cycleMutableLiveData = new MutableLiveData<>();
 
     @Inject
     BicycleViewModel(DataRepository dataRepository, ExecutorService executorService) {
@@ -26,7 +27,18 @@ public class BicycleViewModel extends ViewModel {
         this.executorService = executorService;
     }
 
-    public LiveData<Cycle> getCycleLiveData() {
+    public LiveData<Bicycle> getCycleLiveData() {
         return cycleMutableLiveData;
+    }
+
+    public void bookCycle(String qrcode, String authToken) {
+        executorService.submit(()->{
+            Result<Bicycle> res = dataRepository.bookCycle(qrcode, authToken);
+            if(res instanceof Result.Success) {
+                cycleMutableLiveData.postValue(((Result.Success<Bicycle>) res).getData());
+            } else {
+                cycleMutableLiveData.postValue(null);
+            }
+        });
     }
 }

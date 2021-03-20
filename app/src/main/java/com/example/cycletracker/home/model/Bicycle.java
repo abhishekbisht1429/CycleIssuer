@@ -1,8 +1,12 @@
 package com.example.cycletracker.home.model;
 
-public class Cycle {
+public class Bicycle {
 
-    int id;
+    private int id;
+
+    public Bicycle(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return id;

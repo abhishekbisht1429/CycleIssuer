@@ -1,8 +1,10 @@
 package com.example.cycletracker.data.remoteds;
 
+import com.example.cycletracker.home.model.Bicycle;
 import com.example.cycletracker.model.Result;
 import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.retrofit.ApiClient;
+import com.example.cycletracker.retrofit.model.BookedCycleResp;
 import com.example.cycletracker.retrofit.model.LoginRespData;
 import com.example.cycletracker.retrofit.model.UserData;
 
@@ -70,6 +72,22 @@ public class RemoteDataSource {
         }
 
         return result;
+    }
+
+    public Result<Bicycle> bookCycle(String qrcode, String authToken) {
+        Result<Bicycle> res;
+        try {
+            Response<BookedCycleResp> response = apiClient.getCycleIssuerClient().book(qrcode, authToken).execute();
+            if(response.isSuccessful()) {
+                Bicycle bicycle = new Bicycle(response.body().getCycleId());
+                res = new Result.Success<Bicycle>(bicycle);
+            } else {
+                res = new Result.Error(new Exception("Failed to book cycle. Error code : "+response.code()));
+            }
+        } catch(IOException ioe) {
+            res = new Result.Error(ioe);
+        }
+        return res;
     }
 
     public void lock(int cycleId, int lockVal) {

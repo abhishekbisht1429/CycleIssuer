@@ -2,10 +2,10 @@ package com.example.cycletracker.data;
 
 import com.example.cycletracker.data.localds.LocalDataSource;
 import com.example.cycletracker.data.localds.entity.LoggedInUserEntity;
+import com.example.cycletracker.home.model.Bicycle;
 import com.example.cycletracker.model.Result;
 import com.example.cycletracker.data.remoteds.RemoteDataSource;
 import com.example.cycletracker.model.LoggedInUser;
-import com.example.cycletracker.retrofit.ApiClient;
 
 import javax.inject.Inject;
 
@@ -66,6 +66,16 @@ public class DataRepository {
         }
     }
 
+    public Result<Bicycle> bookCycle(String qrcode, String authToken) {
+        Result<Bicycle> res = remoteDataSource.bookCycle(qrcode, authToken);
+        if(res instanceof Result.Success) {
+
+        } else {
+
+        }
+
+        return res;
+    }
     public void lock(int cycleId, int lockVal) {
         remoteDataSource.lock(cycleId, lockVal);
     }

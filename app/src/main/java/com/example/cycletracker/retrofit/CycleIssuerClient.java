@@ -28,7 +28,7 @@ public interface CycleIssuerClient {
 
     @FormUrlEncoded
     @POST("cycle/book")
-    Call<BookedCycleResp> book(@Field(WApiConsts.FORM_FIELD_QRCODE) String qrcode);
+    Call<BookedCycleResp> book(@Field(WApiConsts.FORM_FIELD_QRCODE) String qrcode, @Header("Authorization") String authToken);
 
     @GET("cycle/booked")
     Call<BookedCycleResp> getBookedCycleId();
