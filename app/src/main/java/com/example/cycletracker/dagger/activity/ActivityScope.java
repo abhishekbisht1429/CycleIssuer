@@ -1,4 +1,4 @@
-package com.example.cycletracker.home.dagger;
+package com.example.cycletracker.dagger.activity;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -7,5 +7,5 @@ import javax.inject.Scope;
 
 @Scope
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HomeScope {
+public @interface ActivityScope {
 }

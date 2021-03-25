@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
 
 import javax.inject.Inject;
 
-public class ProfileFragment extends HomeBaseFragment {
+public class ProfileFragment extends PagerBaseFragment {
 
     private Button logoutButton;
     private TextView textView;
@@ -29,8 +30,8 @@ public class ProfileFragment extends HomeBaseFragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
-        getHomeSubComponent().inject(this);
         super.onAttach(context);
+        getPagerSubComponent().inject(this);
     }
 
     @Override

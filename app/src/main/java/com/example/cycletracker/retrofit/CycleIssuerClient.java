@@ -40,5 +40,5 @@ public interface CycleIssuerClient {
 
     @FormUrlEncoded
     @POST("cycle/return")
-    Call<GenericResponse> returnCycle(@Field(WApiConsts.JSON_KEY_CYCLE_ID) int cycleId);
+    Call<GenericResponse> returnCycle(@Field(WApiConsts.JSON_KEY_CYCLE_ID) int cycleId, @Header("Authorization") String authToken);
 }

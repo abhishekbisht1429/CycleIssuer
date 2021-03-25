@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.cycletracker.R;
 
-public class HistoryFragment extends HomeBaseFragment {
+public class HistoryFragment extends PagerBaseFragment {
 
     public static HistoryFragment newInstance() {
         HistoryFragment fragment = new HistoryFragment();
@@ -20,8 +21,8 @@ public class HistoryFragment extends HomeBaseFragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
-        getHomeSubComponent().inject(this);
         super.onAttach(context);
+        getPagerSubComponent().inject(this);
     }
 
     @Override

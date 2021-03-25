@@ -56,7 +56,7 @@ public class LockActivity extends AppCompatActivity {
         });
 
         returncycleBtn.setOnClickListener((View view)-> {
-            returnCycle();
+//            returnCycle();
         });
 
     }
@@ -67,21 +67,21 @@ public class LockActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    private void returnCycle() {
-        ApiClient.getInstance().getCycleIssuerClient().returnCycle(cycleId)
-                .enqueue(new Callback<GenericResponse>() {
-                    @Override
-                    public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                        if(response.isSuccessful()) {
-                            Toast.makeText(LockActivity.this, "Cycle returned", Toast.LENGTH_SHORT).show();
-                            onBackPressed();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<GenericResponse> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
-    }
+//    private void returnCycle() {
+//        ApiClient.getInstance().getCycleIssuerClient().returnCycle(cycleId)
+//                .enqueue(new Callback<GenericResponse>() {
+//                    @Override
+//                    public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+//                        if(response.isSuccessful()) {
+//                            Toast.makeText(LockActivity.this, "Cycle returned", Toast.LENGTH_SHORT).show();
+//                            onBackPressed();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<GenericResponse> call, Throwable t) {
+//                        t.printStackTrace();
+//                    }
+//                });
+//    }
 }

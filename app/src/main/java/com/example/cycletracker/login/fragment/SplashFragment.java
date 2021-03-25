@@ -1,4 +1,4 @@
-package com.example.cycletracker.home.fragment;
+package com.example.cycletracker.login.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -18,7 +19,7 @@ import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
 
 import javax.inject.Inject;
 
-public class SplashFragment extends HomeBaseFragment {
+public class SplashFragment extends LoginBaseFragment {
 
     private static final long SPLASH_TIME_OUT = 3000;
     private NavController navController;
@@ -28,14 +29,13 @@ public class SplashFragment extends HomeBaseFragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
-        getHomeSubComponent().inject(this);
+        getLoginSubComponent().inject(this);
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         navController = NavHostFragment.findNavController(this);
 
         loggedInUserViewModel.getLoggedInUser().observe(this, (LoggedInUser loggedInUser) -> {

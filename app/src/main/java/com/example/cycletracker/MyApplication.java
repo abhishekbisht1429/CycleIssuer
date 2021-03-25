@@ -2,9 +2,9 @@ package com.example.cycletracker;
 
 import android.app.Application;
 
-import com.example.cycletracker.dagger.AppComponent;
-import com.example.cycletracker.dagger.AppModule;
-import com.example.cycletracker.dagger.DaggerAppComponent;
+import com.example.cycletracker.dagger.application.AppComponent;
+import com.example.cycletracker.dagger.application.AppModule;
+import com.example.cycletracker.dagger.application.DaggerAppComponent;
 
 public class MyApplication extends Application {
 

@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.cycletracker.home.fragment.SplashFragment"
+        android:name="com.example.cycletracker.login.fragment.SplashFragment"
         android:label="SplashFragment"
         tools:layout="@layout/fragment_splash">
         <action
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/dest_main_fragment"
-        android:name="com.example.cycletracker.home.fragment.MainFragment"
+        android:name="com.example.cycletracker.home.fragment.HomeFragment"
         android:label="MainFragment"
-        tools:layout="@layout/fragment_main"/>
+        tools:layout="@layout/fragment_home"/>
 </navigation>

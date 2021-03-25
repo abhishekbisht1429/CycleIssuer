@@ -1,18 +1,14 @@
 package com.example.cycletracker.data.dagger;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.room.Room;
 
-import com.example.cycletracker.dagger.ApplicationScope;
+import com.example.cycletracker.dagger.application.ApplicationScope;
 import com.example.cycletracker.data.localds.LocalDataSource;
 import com.example.cycletracker.data.remoteds.RemoteDataSource;
 import com.example.cycletracker.retrofit.ApiClient;
 
-import javax.inject.Singleton;
-
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 

@@ -1,8 +1,8 @@
-package com.example.cycletracker.dagger;
+package com.example.cycletracker.dagger.application;
 
 import com.example.cycletracker.MyApplication;
 import com.example.cycletracker.data.dagger.DataModule;
-import com.example.cycletracker.home.dagger.HomeSubComponent;
+import com.example.cycletracker.dagger.activity.ActivitySubcomponent;
 import com.example.cycletracker.login.dagger.LoginSubcomponent;
 import com.example.cycletracker.retrofit.dagger.RetrofitModule;
 
@@ -18,6 +18,6 @@ import dagger.android.AndroidInjectionModule;
 public interface AppComponent {
     void inject(MyApplication application);
 
-    HomeSubComponent.Builder homeSubComponentBuilder();
+    ActivitySubcomponent.Builder activitySubComponentBuilder();
     LoginSubcomponent.Builder loginSubcomponentBuilder();
 }

@@ -1,4 +1,4 @@
-package com.example.cycletracker.dagger;
+package com.example.cycletracker.dagger.application;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

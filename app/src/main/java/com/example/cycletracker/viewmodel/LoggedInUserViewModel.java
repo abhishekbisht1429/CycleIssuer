@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.cycletracker.dagger.ApplicationScope;
+import com.example.cycletracker.dagger.application.ApplicationScope;
 import com.example.cycletracker.data.DataRepository;
 import com.example.cycletracker.model.Result;
 import com.example.cycletracker.model.LoggedInUser;

@@ -1,4 +1,4 @@
-package com.example.cycletracker.home.model;
+package com.example.cycletracker.model;
 
 public class Bicycle {
 

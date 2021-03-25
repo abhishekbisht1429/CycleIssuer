@@ -1,12 +1,12 @@
-package com.example.cycletracker.dagger;
+package com.example.cycletracker.dagger.application;
 
 import android.app.Application;
-import android.content.Context;
 
+import com.example.cycletracker.dagger.activity.ActivityScope;
+import com.example.cycletracker.dagger.activity.ActivitySubcomponent;
 import com.example.cycletracker.data.DataRepository;
-import com.example.cycletracker.home.dagger.HomeSubComponent;
 import com.example.cycletracker.login.dagger.LoginSubcomponent;
-import com.example.cycletracker.viewmodel.LoggedInUserViewModel;
+import com.example.cycletracker.viewmodel.ViewModelFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -16,7 +16,7 @@ import dagger.Provides;
 
 @Module(subcomponents =
         {
-                HomeSubComponent.class,
+                ActivitySubcomponent.class,
                 LoginSubcomponent.class
         })
 public class AppModule {
@@ -37,6 +37,12 @@ public class AppModule {
     @ApplicationScope
     ExecutorService provideExecutorService() {
         return Executors.newCachedThreadPool();
+    }
+
+    @Provides
+    @ApplicationScope
+    ViewModelFactory viewModelFactory(DataRepository dataRepository, ExecutorService executorService) {
+        return new ViewModelFactory(dataRepository, executorService);
     }
 
 }

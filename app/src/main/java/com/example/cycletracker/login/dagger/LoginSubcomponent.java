@@ -1,6 +1,7 @@
 package com.example.cycletracker.login.dagger;
 
 import com.example.cycletracker.login.fragment.LoginFragment;
+import com.example.cycletracker.login.fragment.SplashFragment;
 
 import dagger.Subcomponent;
 
@@ -13,4 +14,5 @@ public interface LoginSubcomponent {
     }
 
     void inject(LoginFragment loginFragment);
+    void inject(SplashFragment splashFragment);
 }

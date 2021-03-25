@@ -1,14 +1,16 @@
 package com.example.cycletracker.data.remoteds;
 
-import com.example.cycletracker.home.model.Bicycle;
+import com.example.cycletracker.model.Bicycle;
 import com.example.cycletracker.model.Result;
 import com.example.cycletracker.model.LoggedInUser;
 import com.example.cycletracker.retrofit.ApiClient;
 import com.example.cycletracker.retrofit.model.BookedCycleResp;
+import com.example.cycletracker.retrofit.model.GenericResponse;
 import com.example.cycletracker.retrofit.model.LoginRespData;
 import com.example.cycletracker.retrofit.model.UserData;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
@@ -96,5 +98,22 @@ public class RemoteDataSource {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    public Result<String> returnCycle(int cycleId, String authToken) {
+        Result<String> res;
+        try {
+            Response<GenericResponse> response = apiClient.getCycleIssuerClient().returnCycle(cycleId, authToken).execute();
+            if(response.isSuccessful()) {
+                res = new Result.Success<String>(response.body().getMessage());
+            } else {
+                res = new Result.Error(new Exception("Failed to return cycle. Error code : "+response.code()));
+            }
+        } catch (IOException ioe) {
+            res = new Result.Error(ioe);
+        } catch (Exception e) {
+            res = new Result.Error(e);
+        }
+        return res;
     }
 }
