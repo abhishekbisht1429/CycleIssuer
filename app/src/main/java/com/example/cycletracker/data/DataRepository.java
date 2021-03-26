@@ -67,14 +67,25 @@ public class DataRepository {
         }
     }
 
+    public Result<Bicycle> findBookedCycle() {
+        BookedCycleEntity bookedCycleEntity = localDataSource.getBicycleDao().findBookedCycle();
+        if(bookedCycleEntity!=null) {
+            Bicycle bicycle = new Bicycle(bookedCycleEntity.getCycleId());
+
+            return new Result.Success<Bicycle>(bicycle);
+        } else {
+            return new Result.Error(new Exception("No Booked cycle found"));
+        }
+
+    }
+
     public Result<Bicycle> bookCycle(String qrcode, String authToken) {
         Result<Bicycle> res = remoteDataSource.bookCycle(qrcode, authToken);
         if(res instanceof Result.Success) {
-
-        } else {
-
+            Bicycle bicycle = ((Result.Success<Bicycle>) res).getData();
+            BookedCycleEntity bookedCycleEntity = new BookedCycleEntity(bicycle.getId());
+            localDataSource.getBicycleDao().saveBookedCycle(bookedCycleEntity);
         }
-
         return res;
     }
     public void lock(int cycleId, int lockVal) {

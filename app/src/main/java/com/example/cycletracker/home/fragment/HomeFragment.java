@@ -86,12 +86,16 @@ public class HomeFragment extends Fragment implements BottomNavigationView.OnNav
 //        toolbar.inflateMenu(R.menu.menu_toolbar_main_frag);
 //        toolbar.setOnMenuItemClickListener(this);
 
+        toolbar.setTitle(R.string.app_name);
+
         viewPager2.setAdapter(pagerAdapter);
         viewPager2.setUserInputEnabled(false);
 
         bicycleViewModel.getCycleLiveData().observe(this.getViewLifecycleOwner(), (Bicycle bicycle)->{
             pagerAdapter.notifyDataSetChanged();
         });
+
+        bicycleViewModel.findBookedCycle();
 
         bottomNavView.setOnNavigationItemSelectedListener(this);
 
@@ -148,6 +152,8 @@ public class HomeFragment extends Fragment implements BottomNavigationView.OnNav
 //            }
         }
     }
+
+
 
     private class CustomAdapter extends RecyclerView.Adapter<CustomFragmentViewHolder> {
         private final int ITEM_COUNT = 3;

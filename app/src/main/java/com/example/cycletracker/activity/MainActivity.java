@@ -1,6 +1,8 @@
 package com.example.cycletracker.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import com.example.cycletracker.util.WApiConsts;
 public class MainActivity extends AppCompatActivity {
 
     private ActivitySubcomponent activitySubcomponent;
+    private NavController navController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -27,15 +30,19 @@ public class MainActivity extends AppCompatActivity {
                 .activityModule(new ActivityModule(this))
                 .build();
         activitySubcomponent.inject(this);
+
+        navController = Navigation.findNavController(this, R.id.fragment_nav_host);
     }
 
     public ActivitySubcomponent getActivitySubcomponent() {
         return activitySubcomponent;
     }
-    private void startLockActivity(int cycleId) {
-        Intent intent = new Intent(this, LockActivity.class);
-        intent.putExtra(WApiConsts.JSON_KEY_CYCLE_ID, cycleId);
-        startActivity(intent);
-        finish();
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(!navController.popBackStack()) {
+            finish();
+        }
     }
 }

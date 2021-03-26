@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.cycletracker.dagger.activity.ActivityScope;
 import com.example.cycletracker.data.DataRepository;
+import com.example.cycletracker.data.localds.entity.BookedCycleEntity;
 import com.example.cycletracker.model.Bicycle;
 import com.example.cycletracker.model.Result;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
 @ActivityScope
@@ -29,22 +31,44 @@ public class BicycleViewModel extends ViewModel {
     }
 
     public void bookCycle(String qrcode, String authToken) {
-        executorService.submit(()->{
-            Result<Bicycle> res = dataRepository.bookCycle(qrcode, authToken);
-            if(res instanceof Result.Success) {
-                cycleMutableLiveData.postValue(((Result.Success<Bicycle>) res).getData());
-            } else {
-                cycleMutableLiveData.postValue(null);
-            }
-        });
+            executorService.submit(() -> {
+                try {
+                    Result<Bicycle> res = dataRepository.bookCycle(qrcode, authToken);
+                    if (res instanceof Result.Success) {
+                        cycleMutableLiveData.postValue(((Result.Success<Bicycle>) res).getData());
+                    } else {
+                        cycleMutableLiveData.postValue(null);
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            });
+
     }
 
     public void returnCycle(int id, String authToken) {
-        executorService.submit(()-> {
-            Result<String> res = dataRepository.returnCycle(id, authToken);
-            if(res instanceof Result.Success) {
-                cycleMutableLiveData.postValue(null);
-            }
-        });
+            executorService.submit(() -> {
+                try {
+                    Result<String> res = dataRepository.returnCycle(id, authToken);
+                    if (res instanceof Result.Success) {
+                        cycleMutableLiveData.postValue(null);
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            });
+    }
+
+    public void findBookedCycle() {
+            executorService.submit(() -> {
+                Result<Bicycle> res = dataRepository.findBookedCycle();
+                if(res instanceof Result.Success) {
+
+                    Bicycle bicycle = ((Result.Success<Bicycle>) res).getData();
+                    cycleMutableLiveData.postValue(bicycle);
+                } else {
+                    cycleMutableLiveData.postValue(null);
+                }
+            });
     }
 }

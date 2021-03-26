@@ -49,8 +49,6 @@ public class ProfileFragment extends PagerBaseFragment {
             if(loggedInUser == null) {
                 Toast.makeText(this.getContext(), "Successfully Logged out", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
-            } else {
-                Toast.makeText(this.getContext(), "Failed to logout", Toast.LENGTH_SHORT).show();
             }
         });
         logoutButton = view.findViewById(R.id.btn_logout_profile_frag);
@@ -61,9 +59,5 @@ public class ProfileFragment extends PagerBaseFragment {
         });
 
         return view;
-    }
-
-    public interface FragmentStateChangeListener {
-        void onClickLogout();
     }
 }

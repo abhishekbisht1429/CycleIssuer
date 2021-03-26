@@ -3,6 +3,7 @@ package com.example.cycletracker.login.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,22 +39,25 @@ public class SplashFragment extends LoginBaseFragment {
         super.onCreate(savedInstanceState);
         navController = NavHostFragment.findNavController(this);
 
-        loggedInUserViewModel.getLoggedInUser().observe(this, (LoggedInUser loggedInUser) -> {
-            new Handler().postDelayed(()-> {
-                if(loggedInUser == null) {
-                    navController.navigate(R.id.action_splashFragment_to_loginFragment);
-                } else {
-                    navController.navigate(R.id.action_splashFragment_to_mainFragment3);
-                }
-            }, SPLASH_TIME_OUT);
-        });
-        loggedInUserViewModel.findLoggedInUser(); //find already logged in user if any
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
+
+        loggedInUserViewModel.getLoggedInUser().observe(this.getViewLifecycleOwner(), (LoggedInUser loggedInUser) -> {
+            new Handler().postDelayed(()-> {
+                CharSequence name = navController.getCurrentDestination().getLabel();
+                Log.i("name : ", name.toString());
+                if(loggedInUser == null) {
+                    navController.navigate(R.id.action_splashFragment_to_loginFragment);
+                } else {
+                    navController.navigate(R.id.action_splashFragment_to_homeFragment);
+                }
+            }, SPLASH_TIME_OUT);
+        });
+        loggedInUserViewModel.findLoggedInUser(); //find already logged in user if any
 
         return view;
     }
