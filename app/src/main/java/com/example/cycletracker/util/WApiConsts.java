@@ -18,6 +18,6 @@ public interface WApiConsts {
     String JSON_KEY_ERROR = "error";
     String JSON_KEY_MESSAGE = "message";
     String JSON_KEY_CYCLE_ID = "cycle_id";
-    String JSON_KEY_LOCK_VALUE = "lock";
+    String JSON_KEY_LOCK_VALUE = "locked";
 
 }

@@ -70,7 +70,7 @@ public class DataRepository {
     public Result<Bicycle> findBookedCycle() {
         BookedCycleEntity bookedCycleEntity = localDataSource.getBicycleDao().findBookedCycle();
         if(bookedCycleEntity!=null) {
-            Bicycle bicycle = new Bicycle(bookedCycleEntity.getCycleId());
+            Bicycle bicycle = new Bicycle(bookedCycleEntity.getCycleId(), bookedCycleEntity.isLocked());
 
             return new Result.Success<Bicycle>(bicycle);
         } else {
@@ -83,19 +83,25 @@ public class DataRepository {
         Result<Bicycle> res = remoteDataSource.bookCycle(qrcode, authToken);
         if(res instanceof Result.Success) {
             Bicycle bicycle = ((Result.Success<Bicycle>) res).getData();
-            BookedCycleEntity bookedCycleEntity = new BookedCycleEntity(bicycle.getId());
+            BookedCycleEntity bookedCycleEntity = new BookedCycleEntity(bicycle.getId(), bicycle.isLocked());
             localDataSource.getBicycleDao().saveBookedCycle(bookedCycleEntity);
         }
         return res;
     }
-    public void lock(int cycleId, int lockVal) {
-        remoteDataSource.lock(cycleId, lockVal);
+
+    public Result<String> changeLockState(Bicycle bicycle, boolean locked, String authToken) {
+        Result<String> res = remoteDataSource.changeLockState(bicycle.getId(), locked, authToken);
+        if(res instanceof Result.Success) {
+            BookedCycleEntity bookedCycleEntity = new BookedCycleEntity(bicycle.getId(), locked);
+            localDataSource.getBicycleDao().updateBookedCycle(bookedCycleEntity);
+        }
+        return res;
     }
 
-    public Result<String> returnCycle(int cycleId, String authToken) {
-        Result<String> res = remoteDataSource.returnCycle(cycleId, authToken);
+    public Result<String> returnCycle(Bicycle bicycle, String authToken) {
+        Result<String> res = remoteDataSource.returnCycle(bicycle.getId(), authToken);
         if(res instanceof Result.Success) {
-            BookedCycleEntity bookedCycleEntity = new BookedCycleEntity(cycleId);
+            BookedCycleEntity bookedCycleEntity = new BookedCycleEntity(bicycle.getId(), bicycle.isLocked());
             localDataSource.getBicycleDao().deleteBookedCycle(bookedCycleEntity);
         }
         return res;

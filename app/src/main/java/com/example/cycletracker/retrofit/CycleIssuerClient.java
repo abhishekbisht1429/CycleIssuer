@@ -28,7 +28,8 @@ public interface CycleIssuerClient {
 
     @FormUrlEncoded
     @POST("cycle/book")
-    Call<BookedCycleResp> book(@Field(WApiConsts.FORM_FIELD_QRCODE) String qrcode, @Header("Authorization") String authToken);
+    Call<BookedCycleResp> book(@Field(WApiConsts.FORM_FIELD_QRCODE) String qrcode,
+                               @Header("Authorization") String authToken);
 
     @GET("cycle/booked")
     Call<BookedCycleResp> getBookedCycleId();
@@ -36,9 +37,11 @@ public interface CycleIssuerClient {
     @FormUrlEncoded
     @POST("cycle/lock")
     Call<GenericResponse> lock(@Field(WApiConsts.JSON_KEY_CYCLE_ID) int cycleId,
-                               @Field(WApiConsts.JSON_KEY_LOCK_VALUE) int lock);
+                               @Field(WApiConsts.JSON_KEY_LOCK_VALUE) boolean locked,
+                               @Header("Authorization") String authKey);
 
     @FormUrlEncoded
     @POST("cycle/return")
-    Call<GenericResponse> returnCycle(@Field(WApiConsts.JSON_KEY_CYCLE_ID) int cycleId, @Header("Authorization") String authToken);
+    Call<GenericResponse> returnCycle(@Field(WApiConsts.JSON_KEY_CYCLE_ID) int cycleId,
+                                      @Header("Authorization") String authToken);
 }

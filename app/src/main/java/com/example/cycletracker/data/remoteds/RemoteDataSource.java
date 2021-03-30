@@ -10,7 +10,6 @@ import com.example.cycletracker.retrofit.model.LoginRespData;
 import com.example.cycletracker.retrofit.model.UserData;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
@@ -81,7 +80,8 @@ public class RemoteDataSource {
         try {
             Response<BookedCycleResp> response = apiClient.getCycleIssuerClient().book(qrcode, authToken).execute();
             if(response.isSuccessful()) {
-                Bicycle bicycle = new Bicycle(response.body().getCycleId());
+                BookedCycleResp bookedCycleResp = response.body();
+                Bicycle bicycle = new Bicycle(bookedCycleResp.getCycleId(), bookedCycleResp.isLocked());
                 res = new Result.Success<Bicycle>(bicycle);
             } else {
                 res = new Result.Error(new Exception("Failed to book cycle. Error code : "+response.code()));
@@ -92,12 +92,22 @@ public class RemoteDataSource {
         return res;
     }
 
-    public void lock(int cycleId, int lockVal) {
+    public Result<String> changeLockState(int cycleId, boolean locked, String authToken) {
+        Result<String> res;
         try {
-            apiClient.getCycleIssuerClient().lock(cycleId, lockVal).execute();
+            Response<GenericResponse> response = apiClient.getCycleIssuerClient().lock(cycleId, locked, authToken).execute();
+            if(response.isSuccessful()) {
+                res = new Result.Success<String>(response.body().getMessage());
+            } else {
+                res = new Result.Error(new Exception("Failed to change the lock state. Error code : "+response.code()));
+            }
         } catch (IOException ioe) {
+            res = new Result.Error(ioe);
             ioe.printStackTrace();
+        } catch (Exception e) {
+            res = new Result.Error(e);
         }
+        return res;
     }
 
     public Result<String> returnCycle(int cycleId, String authToken) {

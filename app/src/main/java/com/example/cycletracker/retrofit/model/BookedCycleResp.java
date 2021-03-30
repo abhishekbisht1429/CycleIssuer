@@ -8,7 +8,14 @@ public class BookedCycleResp extends GenericResponse {
     @SerializedName(WApiConsts.JSON_KEY_CYCLE_ID)
     Integer cycleId;
 
+    @SerializedName(WApiConsts.JSON_KEY_LOCK_VALUE)
+    Boolean locked;
+
     public Integer getCycleId() {
         return cycleId;
+    }
+
+    public Boolean isLocked() {
+        return locked;
     }
 }

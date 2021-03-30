@@ -46,10 +46,10 @@ public class BicycleViewModel extends ViewModel {
 
     }
 
-    public void returnCycle(int id, String authToken) {
+    public void returnCycle(String authToken) {
             executorService.submit(() -> {
                 try {
-                    Result<String> res = dataRepository.returnCycle(id, authToken);
+                    Result<String> res = dataRepository.returnCycle(cycleMutableLiveData.getValue(), authToken);
                     if (res instanceof Result.Success) {
                         cycleMutableLiveData.postValue(null);
                     }
@@ -70,5 +70,16 @@ public class BicycleViewModel extends ViewModel {
                     cycleMutableLiveData.postValue(null);
                 }
             });
+    }
+
+    public void changeLockState(boolean locked, String authToken) {
+        executorService.submit(()-> {
+            Result<String> res = dataRepository.changeLockState(cycleMutableLiveData.getValue(), locked, authToken);
+            if(res instanceof Result.Success) {
+                cycleMutableLiveData.getValue().setLockState(locked);
+            } else {
+                /* Set the error flag */
+            }
+        });
     }
 }

@@ -3,16 +3,11 @@ package com.example.cycletracker.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-
-import android.content.Intent;
 import android.os.Bundle;
-
 import com.example.cycletracker.MyApplication;
 import com.example.cycletracker.R;
 import com.example.cycletracker.dagger.activity.ActivityModule;
 import com.example.cycletracker.dagger.activity.ActivitySubcomponent;
-import com.example.cycletracker.lock.activity.LockActivity;
-import com.example.cycletracker.util.WApiConsts;
 
 public class MainActivity extends AppCompatActivity {
 
